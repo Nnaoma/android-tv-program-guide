@@ -1,6 +1,7 @@
 package com.egeniq.programguide
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.text.Spanned
 import android.text.SpannedString
 import android.util.Log
@@ -49,6 +50,12 @@ class EpgFragment : ProgramGuideFragment<EpgFragment.SimpleProgram>() {
         val description: String,
         val metadata: String
     )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        showBottomDetail = false
+        showProgramGuideDayFilter = false
+    }
 
     override fun onScheduleClicked(programGuideSchedule: ProgramGuideSchedule<SimpleProgram>) {
         val innerSchedule = programGuideSchedule.program

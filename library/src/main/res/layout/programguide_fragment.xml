@@ -20,7 +20,7 @@
     android:id="@+id/programguide_constraint_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/programguide_header_background"
+    android:background="@android:color/black"
     tools:ignore="Overdraw">
 
     <Button
@@ -65,48 +65,59 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/programguide_detail_image"
-        style="@style/ProgramGuide.Image.Detail"
-        android:layout_marginStart="@dimen/programguide_page_left_padding"
-        android:contentDescription="@string/programguide_content_description_large_thumbnail"
-        android:background="@drawable/programguide_tile_placeholder"
-        android:src="@drawable/programguide_icon_placeholder"
-        app:layout_constraintBottom_toBottomOf="@id/bottom_detail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/bottom_detail" />
-
-    <TextView
-        android:id="@+id/programguide_detail_title"
-        style="@style/ProgramGuide.Text.Detail.Title"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/programguide_program_more_details_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
+        app:layout_constraintTop_toTopOf="@id/bottom_detail"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/programguide_detail_image"
-        app:layout_constraintTop_toTopOf="@id/programguide_detail_image"
-        tools:text="NPO Politiek" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/programguide_detail_metadata"
-        style="@style/ProgramGuide.Text.Detail.Metadata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        app:layout_constraintStart_toStartOf="@id/programguide_detail_title"
-        app:layout_constraintTop_toBottomOf="@id/programguide_detail_title"
-        tools:text="EenVandaag • Wo 30 jan 20:00 • AVROTROS" />
+        <ImageView
+            android:id="@+id/programguide_detail_image"
+            style="@style/ProgramGuide.Image.Detail"
+            android:layout_marginStart="@dimen/programguide_page_left_padding"
+            android:contentDescription="@string/programguide_content_description_large_thumbnail"
+            android:background="@drawable/programguide_tile_placeholder"
+            android:src="@drawable/programguide_icon_placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/programguide_detail_description"
-        style="@style/ProgramGuide.Text.Detail.Description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/programguide_detail_title"
-        app:layout_constraintTop_toBottomOf="@id/programguide_detail_metadata"
-        tools:text="This is the description of the item.\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6" />
+        <TextView
+            android:id="@+id/programguide_detail_title"
+            style="@style/ProgramGuide.Text.Detail.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/programguide_detail_image"
+            app:layout_constraintTop_toTopOf="@id/programguide_detail_image"
+            tools:text="NPO Politiek" />
+
+        <TextView
+            android:id="@+id/programguide_detail_metadata"
+            style="@style/ProgramGuide.Text.Detail.Metadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            app:layout_constraintStart_toStartOf="@id/programguide_detail_title"
+            app:layout_constraintTop_toBottomOf="@id/programguide_detail_title"
+            tools:text="EenVandaag • Wo 30 jan 20:00 • AVROTROS" />
+
+        <TextView
+            android:id="@+id/programguide_detail_description"
+            style="@style/ProgramGuide.Text.Detail.Description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/programguide_detail_title"
+            app:layout_constraintTop_toBottomOf="@id/programguide_detail_metadata"
+            tools:text="This is the description of the item.\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/programguide_top_margin"

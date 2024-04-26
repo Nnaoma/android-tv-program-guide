@@ -142,6 +142,27 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
 
     private var focusEnabledScrollListener: RecyclerView.OnScrollListener? = null
 
+    var showProgramGuideDayFilter: Boolean = true
+        get() = field
+        set(value) {
+            field = value
+            view?.let { setupDayFilter(it) }
+        }
+
+    var showProgramGuideTimeOfDayFilter: Boolean = true
+        get() = field
+        set(value) {
+            field = value
+            view?.let { setupTimeOfDayFilter(it) }
+        }
+
+    var showBottomDetail: Boolean = true
+        get() = field
+        set(value) {
+            field = value
+            view?.let { showBottomDetails(it) }
+        }
+
     protected var currentDate: LocalDate = FixedLocalDateTime.now().toLocalDate()
         private set
 
@@ -203,6 +224,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
             inflater.inflate(OVERRIDE_LAYOUT_ID ?: R.layout.programguide_fragment, container, false)
         setupFilters(view)
         setupComponents(view)
+        showBottomDetails(view)
         return view
     }
 
@@ -213,6 +235,86 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
      */
     private fun setupFilters(view: View) {
         // Day filter
+        setupDayFilter(view)
+
+        // Time of day filter
+        setupTimeOfDayFilter(view)
+    }
+
+    private fun setupTimeOfDayFilter(view: View) {
+        if (!showProgramGuideTimeOfDayFilter) {
+            view.findViewById<View>(R.id.programguide_time_of_day_filter).apply {
+                visibility = View.GONE
+            }
+            return
+        } else {
+            view.findViewById<View>(R.id.programguide_time_of_day_filter).apply {
+                visibility = View.VISIBLE
+            }
+        }
+
+        val now = FixedZonedDateTime.now().withZoneSameInstant(DISPLAY_TIMEZONE)
+
+        val isItMorning = now.hour < MORNING_UNTIL_HOUR
+        val isItAfternoon = !isItMorning && now.hour < AFTERNOON_UNTIL_HOUR
+        val isItEvening = !isItMorning && !isItAfternoon
+
+        val timeOfDayFilterOptions = listOf(
+            FilterOption(
+                getString(R.string.programguide_part_of_day_morning),
+                TIME_OF_DAY_MORNING,
+                isItMorning
+            ),
+            FilterOption(
+                getString(R.string.programguide_part_of_day_afternoon),
+                TIME_OF_DAY_AFTERNOON,
+                isItAfternoon
+            ),
+            FilterOption(
+                getString(R.string.programguide_part_of_day_evening),
+                TIME_OF_DAY_EVENING,
+                isItEvening
+            )
+        )
+
+        if (currentlySelectedTimeOfDayFilterIndex == -1) {
+            currentlySelectedTimeOfDayFilterIndex = when {
+                isItMorning -> 0
+                isItAfternoon -> 1
+                else -> 2
+            }
+        }
+        val timeOfDayFilter = view.findViewById<View>(R.id.programguide_time_of_day_filter)
+        timeOfDayFilter.findViewById<TextView>(R.id.programguide_filter_title).text =
+            timeOfDayFilterOptions[currentlySelectedTimeOfDayFilterIndex].displayTitle
+        timeOfDayFilter?.setOnClickListener {
+            AlertDialog.Builder(it.context)
+                .setTitle(R.string.programguide_day_time_selector_title)
+                .setSingleChoiceItems(
+                    timeOfDayFilterOptions.map { option -> option.displayTitle }.toTypedArray(),
+                    currentlySelectedTimeOfDayFilterIndex
+                ) { dialogInterface, position ->
+                    currentlySelectedTimeOfDayFilterIndex = position
+                    timeOfDayFilter.findViewById<TextView>(R.id.programguide_filter_title).text =
+                        timeOfDayFilterOptions[currentlySelectedTimeOfDayFilterIndex].displayTitle
+                    dialogInterface.dismiss()
+                    autoScrollToBestProgramme(useTimeOfDayFilter = true)
+                }
+                .show()
+        }
+    }
+
+    private fun setupDayFilter(view: View) {
+        if (!showProgramGuideDayFilter) {
+            view.findViewById<View>(R.id.programguide_day_filter).apply {
+                visibility = View.GONE
+            }
+            return
+        } else {
+            view.findViewById<View>(R.id.programguide_day_filter).apply {
+                visibility = View.VISIBLE
+            }
+        }
         val now = FixedZonedDateTime.now().withZoneSameInstant(DISPLAY_TIMEZONE)
         val dayFilterOptions =
             (-SELECTABLE_DAYS_IN_PAST until SELECTABLE_DAYS_IN_FUTURE).map { dayIndex ->
@@ -264,54 +366,25 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
                 .show()
 
         }
+    }
 
-        // Time of day filter
-        val isItMorning = now.hour < MORNING_UNTIL_HOUR
-        val isItAfternoon = !isItMorning && now.hour < AFTERNOON_UNTIL_HOUR
-        val isItEvening = !isItMorning && !isItAfternoon
-
-        val timeOfDayFilterOptions = listOf(
-            FilterOption(
-                getString(R.string.programguide_part_of_day_morning),
-                TIME_OF_DAY_MORNING,
-                isItMorning
-            ),
-            FilterOption(
-                getString(R.string.programguide_part_of_day_afternoon),
-                TIME_OF_DAY_AFTERNOON,
-                isItAfternoon
-            ),
-            FilterOption(
-                getString(R.string.programguide_part_of_day_evening),
-                TIME_OF_DAY_EVENING,
-                isItEvening
-            )
-        )
-
-        if (currentlySelectedTimeOfDayFilterIndex == -1) {
-            currentlySelectedTimeOfDayFilterIndex = when {
-                isItMorning -> 0
-                isItAfternoon -> 1
-                else -> 2
+    private fun showBottomDetails(view: View) {
+        if (!showBottomDetail) {
+            view.findViewById<ViewGroup>(R.id.programguide_program_more_details_layout).apply {
+                visibility = ViewGroup.GONE
             }
-        }
-        val timeOfDayFilter = view.findViewById<View>(R.id.programguide_time_of_day_filter)
-        timeOfDayFilter.findViewById<TextView>(R.id.programguide_filter_title).text =
-            timeOfDayFilterOptions[currentlySelectedTimeOfDayFilterIndex].displayTitle
-        timeOfDayFilter?.setOnClickListener {
-            AlertDialog.Builder(it.context)
-                .setTitle(R.string.programguide_day_time_selector_title)
-                .setSingleChoiceItems(
-                    timeOfDayFilterOptions.map { option -> option.displayTitle }.toTypedArray(),
-                    currentlySelectedTimeOfDayFilterIndex
-                ) { dialogInterface, position ->
-                    currentlySelectedTimeOfDayFilterIndex = position
-                    timeOfDayFilter.findViewById<TextView>(R.id.programguide_filter_title).text =
-                        timeOfDayFilterOptions[currentlySelectedTimeOfDayFilterIndex].displayTitle
-                    dialogInterface.dismiss()
-                    autoScrollToBestProgramme(useTimeOfDayFilter = true)
-                }
-                .show()
+
+            view.findViewById<View>(R.id.bottom_detail).apply {
+                visibility = View.GONE
+            }
+        } else {
+            view.findViewById<ViewGroup>(R.id.programguide_program_more_details_layout).apply {
+                visibility = ViewGroup.VISIBLE
+            }
+
+            view.findViewById<View>(R.id.bottom_detail).apply {
+                visibility = View.VISIBLE
+            }
         }
     }
 
