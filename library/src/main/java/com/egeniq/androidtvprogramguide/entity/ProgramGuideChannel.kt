@@ -27,4 +27,5 @@ interface ProgramGuideChannel {
     val id: String
     val name: Spanned?
     val imageUrl: String?
+    val channelNumber: String?
 }

@@ -36,18 +36,22 @@ import kotlin.math.abs
  */
 class ProgramGuideTimeListAdapter(
     res: Resources,
-    private val displayTimezone: ZoneId
+    private val displayTimezone: ZoneId,
+    useMilitaryTime: Boolean,
 ) : RecyclerView.Adapter<ProgramGuideTimeListAdapter.TimeViewHolder>() {
 
     companion object {
         private val TIME_UNIT_MS = TimeUnit.MINUTES.toMillis(30)
         private var rowHeaderOverlapping: Int = 0
-        private val TIME_FORMATTER = DateTimeFormatter.ofPattern("H:mm")
+        private val TIME_FORMATTER_MILITARY = DateTimeFormatter.ofPattern("H:mm")
+        private val TIME_FORMATTER_NORMAL = DateTimeFormatter.ofPattern("h:mm a")
     }
 
     // Nearest half hour at or before the start time.
     private var startUtcMs: Long = 0
     private var timelineAdjustmentPixels = 0
+
+    private val TIME_FORMATTER = if (useMilitaryTime) TIME_FORMATTER_MILITARY else TIME_FORMATTER_NORMAL
 
     init {
         if (rowHeaderOverlapping == 0) {

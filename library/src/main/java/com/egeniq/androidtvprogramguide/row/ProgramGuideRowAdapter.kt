@@ -118,6 +118,7 @@ internal class ProgramGuideRowAdapter(
 
         private val channelNameView: TextView = container.findViewById(R.id.programguide_channel_name)
         private val channelLogoView: ImageView = container.findViewById(R.id.programguide_channel_logo)
+        private val channelNumber: TextView = container.findViewById(R.id.programguide_channel_number)
 
         init {
             val channelContainer =
@@ -158,6 +159,11 @@ internal class ProgramGuideRowAdapter(
             }
             channelNameView.text = channel.name
             channelNameView.visibility = View.VISIBLE
+
+            if (channel.channelNumber != null) {
+                channelNumber.visibility = View.VISIBLE
+                channelNumber.text = channel.channelNumber
+            }
         }
 
         internal fun updateLayout() {

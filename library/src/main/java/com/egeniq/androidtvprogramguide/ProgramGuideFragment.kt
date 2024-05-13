@@ -78,7 +78,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
         private const val TIME_OF_DAY_AFTERNOON = "time_of_day_afternoon"
         private const val TIME_OF_DAY_EVENING = "time_of_day_evening"
 
-        private const val MORNING_STARTS_AT_HOUR = 6
+        private const val MORNING_STARTS_AT_HOUR = 0
         private const val MORNING_UNTIL_HOUR = 12
         private const val AFTERNOON_UNTIL_HOUR = 19
 
@@ -98,6 +98,8 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
     protected open val DATE_WITH_DAY_FORMATTER: DateTimeFormatter =
         DateTimeFormatter.ofPattern("EEE d MMM").withLocale(DISPLAY_LOCALE)
     protected open val DISPLAY_CURRENT_TIME_INDICATOR = true
+
+    protected open val USE_MILITARY_TIME = true
 
     override val DISPLAY_SHOW_PROGRESS = true
 
@@ -471,7 +473,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
         programGuideManager.listeners.add(this)
         currentDateView?.alpha = 0f
         timeRow.let { timelineRow ->
-            val timelineAdapter = ProgramGuideTimeListAdapter(resources, DISPLAY_TIMEZONE)
+            val timelineAdapter = ProgramGuideTimeListAdapter(resources, DISPLAY_TIMEZONE, USE_MILITARY_TIME)
             if (timelineStartMillis > 0) {
                 timelineAdapter.update(timelineStartMillis, timelineAdjustmentPixels)
             }

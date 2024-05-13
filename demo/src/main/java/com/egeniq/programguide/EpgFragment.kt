@@ -20,6 +20,8 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -31,8 +33,8 @@ class EpgFragment : ProgramGuideFragment<EpgFragment.SimpleProgram>() {
 
     // Feel free to change configuration values like this:
     //
-    // override val DISPLAY_CURRENT_TIME_INDICATOR = false
-    // override val DISPLAY_SHOW_PROGRESS = false
+//     override val DISPLAY_CURRENT_TIME_INDICATOR = false
+//     override val DISPLAY_SHOW_PROGRESS = false
 
     companion object {
         private val TAG = EpgFragment::class.java.name
@@ -41,7 +43,8 @@ class EpgFragment : ProgramGuideFragment<EpgFragment.SimpleProgram>() {
     data class SimpleChannel(
         override val id: String,
         override val name: Spanned?,
-        override val imageUrl: String?
+        override val imageUrl: String?,
+        override val channelNumber: String? = null
     ) : ProgramGuideChannel
 
     // You can put your own data in the program class
@@ -102,9 +105,10 @@ class EpgFragment : ProgramGuideFragment<EpgFragment.SimpleProgram>() {
     override fun requestingProgramGuideFor(localDate: LocalDate) {
         // Faking an asynchronous loading here
         setState(State.Loading)
+        Log.e("localtime", LocalDateTime.of(localDate, LocalTime.parse("12:30")).toString())
 
         val MIN_CHANNEL_START_TIME =
-            localDate.atStartOfDay().withHour(2).truncatedTo(ChronoUnit.HOURS)
+            localDate.atStartOfDay(). withHour(2).truncatedTo(ChronoUnit.HOURS)
                 .atZone(DISPLAY_TIMEZONE)
         val MAX_CHANNEL_START_TIME =
             localDate.atStartOfDay().withHour(8).truncatedTo(ChronoUnit.HOURS)

@@ -25,7 +25,7 @@
     <dimen name="programguide_gap_item_corner_radius">2dp</dimen>
     <dimen name="programguide_time_row_negative_margin">64dp</dimen>
     <dimen name="programguide_time_row_height">36dp</dimen>
-    <dimen name="programguide_channel_column_width">160dp</dimen>
+    <dimen name="programguide_channel_column_width">190dp</dimen>
     <dimen name="programguide_page_left_padding">32dp</dimen>
     <dimen name="programguide_current_time_indicator_top_height">4dp</dimen>
     <dimen name="programguide_filter_spacing">8dp</dimen>

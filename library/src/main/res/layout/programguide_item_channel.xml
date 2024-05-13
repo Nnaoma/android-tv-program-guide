@@ -16,26 +16,46 @@
 
 <!-- The background of header_column will be programmatically changed
      in order to support rounded corners. -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/programguide_channel_container"
-    android:layout_width="@dimen/programguide_channel_column_width"
+    android:paddingStart="25dp"
     android:layout_height="@dimen/programguide_program_row_height_with_empty_space"
+    android:layout_width="@dimen/programguide_channel_column_width"
     android:background="@drawable/programguide_channel_item_background"
-    android:paddingLeft="@dimen/programguide_page_left_padding">
+    android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/programguide_channel_name"
-        style="@style/ProgramGuide.Text.Channel"
+        android:id="@+id/programguide_channel_number"
+        android:textColor="@color/programguide_channel_text_color"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="NPO Zappelin Xtra" />
-
-    <ImageView
-        android:id="@+id/programguide_channel_logo"
-        style="@style/ProgramGuide.Image.Channel"
-        android:contentDescription="@string/programguide_content_description_channel_logo"
+        android:layout_marginHorizontal="5dp"
+        android:layout_weight="0"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:text="200"
+        tools:visibility="visible"/>
 
-</FrameLayout>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/programguide_program_row_height_with_empty_space">
+<!--        android:paddingLeft="@dimen/programguide_page_left_padding"-->
+
+        <TextView
+            android:id="@+id/programguide_channel_name"
+            style="@style/ProgramGuide.Text.Channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="NPO Zappelin Xtra" />
+
+        <ImageView
+            android:id="@+id/programguide_channel_logo"
+            style="@style/ProgramGuide.Image.Channel"
+            android:contentDescription="@string/programguide_content_description_channel_logo"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+</LinearLayout>
